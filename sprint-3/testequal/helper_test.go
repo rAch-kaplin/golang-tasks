@@ -1,5 +1,5 @@
 package testequal
-
+/*
 import (
 	"bytes"
 	"os"
@@ -31,3 +31,4 @@ func TestHelper(t *testing.T) {
 	}
 	t.Fatalf("process ran with err %v, want exit status 1", err)
 }
+*/

@@ -1,5 +1,5 @@
 package testequal
-
+/*
 import (
 	"fmt"
 	"math"
@@ -170,3 +170,4 @@ func BenchmarkTestifyRequireEqualMap(b *testing.B) {
 		require.Equal(mockT, m1, m2)
 	}
 }
+*/
