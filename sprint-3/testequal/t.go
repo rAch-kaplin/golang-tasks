@@ -1,6 +1,6 @@
 //go:build !change
-/*
 package testequal
+/*
 
 // T is an interface wrapper for *testing.T
 // that contains only a small subset of methods.

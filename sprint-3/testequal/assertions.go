@@ -1,6 +1,6 @@
 //go:build !solution
-/*
 package testequal
+/*
 
 // AssertEqual checks that expected and actual are equal.
 //
