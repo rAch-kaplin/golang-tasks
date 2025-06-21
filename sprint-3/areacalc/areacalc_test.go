@@ -1,5 +1,5 @@
-/*package areacalc
-
+package areacalc
+/*
 import "testing"
 
 const (
