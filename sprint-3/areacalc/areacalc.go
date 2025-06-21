@@ -1,5 +1,5 @@
 package areacalc
-
+/*
 const pi = 3.14159
 
 type Shape interface {
@@ -31,3 +31,4 @@ func AreaCalculator(figures []Shape) (string, float64) {
 	// TODO: implement me
 	return "", 0.0
 }
+*/

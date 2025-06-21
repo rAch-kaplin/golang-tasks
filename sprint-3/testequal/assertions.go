@@ -1,5 +1,5 @@
 //go:build !solution
-
+/*
 package testequal
 
 // AssertEqual checks that expected and actual are equal.
@@ -29,3 +29,4 @@ func RequireEqual(t T, expected, actual interface{}, msgAndArgs ...interface{}) 
 func RequireNotEqual(t T, expected, actual interface{}, msgAndArgs ...interface{}) {
 	panic("implement me")
 }
+*/

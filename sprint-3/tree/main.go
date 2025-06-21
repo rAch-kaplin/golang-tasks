@@ -22,8 +22,6 @@ https://en.wikipedia.org/wiki/Tree_(command)
 https://mama.indstate.edu/users/ice/tree/
 https://stackoverflow.com/questions/32151776/visualize-tree-in-bash-like-the-output-of-unix-tree
 
-*/
-
 import (
 	"io"
 	"os"
@@ -47,7 +45,6 @@ import (
 	- last element prefix is `└───`
 	- other elements prefix is `├───`
 	- nested elements aligned with one tab `	` for each level
-*/
 
 const (
 	EOL             = "\n"

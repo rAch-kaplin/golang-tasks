@@ -1,5 +1,5 @@
 //go:build !change
-
+/*
 package testequal
 
 // T is an interface wrapper for *testing.T
@@ -9,3 +9,4 @@ type T interface {
 	Helper()
 	FailNow()
 }
+*/
