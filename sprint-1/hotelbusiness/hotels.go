@@ -4,6 +4,7 @@ package hotelbusiness
 
 import (
 	"slices"
+	"maps"
 )
 
 type Guest struct {
@@ -29,10 +30,7 @@ func ComputeLoad(guests []Guest) []Load {
 	}
 
 	// Создаём сортированный список дней
-	dates := make([]int, 0, len(delta))
-	for day := range delta {
-		dates = append(dates, day)
-	}
+	dates := slices.Collect(maps.Keys(delta))
 
 	slices.Sort(dates)
 
