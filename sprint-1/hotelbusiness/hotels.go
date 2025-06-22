@@ -3,7 +3,7 @@
 package hotelbusiness
 
 import (
-	"sort"
+	"slices"
 )
 
 type Guest struct {
@@ -24,7 +24,7 @@ func ComputeLoad(guests []Guest) []Load {
 	// Записываем изменение гостей по дням
 	delta := make(map[int]int)
 	for _, guest := range guests {
-		delta[guest.CheckInDate]  += 1
+		delta[guest.CheckInDate] += 1
 		delta[guest.CheckOutDate] -= 1
 	}
 
@@ -33,14 +33,15 @@ func ComputeLoad(guests []Guest) []Load {
 	for day := range delta {
 		dates = append(dates, day)
 	}
-	sort.Ints(dates)
 
-	cur_guests := 0
+	slices.Sort(dates)
+
+	curGuests := 0
 	result := make([]Load, 0)
 	for _, day := range dates {
-		cur_guests += delta[day]
-		if (len(result) == 0) || (cur_guests != result[len(result) - 1].GuestCount) {
-			result = append(result, Load{day, cur_guests})
+		curGuests += delta[day]
+		if (len(result) == 0) || (curGuests != result[len(result)-1].GuestCount) {
+			result = append(result, Load{day, curGuests})
 		}
 	}
 

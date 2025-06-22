@@ -3,19 +3,20 @@
 package speller
 
 import (
-		"strings"
+	"strings"
+	// "github.com/mipt-golang-course/golang-tasks/sprint-1/varjoin"
 )
 
-var ones = map[int64]string {
-	1  : "one",
-	2  : "two",
-	3  : "three",
-	4  : "four",
-	5  : "five",
-	6  : "six",
-	7  : "seven",
-	8  : "eight",
-	9  : "nine",
+var ones = map[int64]string{
+	1: "one",
+	2: "two",
+	3: "three",
+	4: "four",
+	5: "five",
+	6: "six",
+	7: "seven",
+	8: "eight",
+	9: "nine",
 }
 
 var teens = map[int64]string{
@@ -42,14 +43,16 @@ var tens = map[int64]string{
 	90: "ninety",
 }
 
-const max_number = 1_000_000_000_000
+const maxNumber = 1_000_000_000_000
 
 func Spell(n int64) string {
-	if (n < -max_number + 1) || (n > max_number - 1) {
+	if (n < -maxNumber+1) || (n > maxNumber-1) {
 		return "invalid n"
 	}
 
-	if n == 0 { return "zero" }
+	if n == 0 {
+		return "zero"
+	}
 
 	n, minus := SpellMinus(n)
 	var parts []string
@@ -58,26 +61,26 @@ func Spell(n int64) string {
 	}
 
 	var (
-		billions        	=  n / 1_000_000_000
-		millions  			= (n / 1_000_000) % 1_000
-		thousands 			= (n / 1_000)     % 1_000
-		below_thousand      =  n % 1_000
+		billions      = n / 1_000_000_000
+		millions      = (n / 1_000_000) % 1_000
+		thousands     = (n / 1_000) % 1_000
+		belowThousand = n % 1_000
 	)
 
 	if billions > 0 {
-		parts = append(parts, SpellBelowThousand(billions),  "billion")
+		parts = append(parts, SpellBelowThousand(billions), "billion")
 	}
 
 	if millions > 0 {
-		parts = append(parts, SpellBelowThousand(millions),  "million")
+		parts = append(parts, SpellBelowThousand(millions), "million")
 	}
 
 	if thousands > 0 {
 		parts = append(parts, SpellBelowThousand(thousands), "thousand")
 	}
 
-	if below_thousand > 0 {
-		parts = append(parts, SpellBelowThousand(below_thousand))
+	if belowThousand > 0 {
+		parts = append(parts, SpellBelowThousand(belowThousand))
 	}
 
 	return Join(" ", parts...)
@@ -101,13 +104,12 @@ func SpellBelowThousand(n int64) string {
 	}
 
 	if n >= 20 {
-		tens_val := (n / 10) * 10
-		if n % 10 != 0 {
-			parts = append(parts, tens[tens_val] + "-" + ones[n % 10])
+		tensVal := (n / 10) * 10
+		if n%10 != 0 {
+			parts = append(parts, tens[tensVal]+"-"+ones[n%10])
 		} else {
-			parts = append(parts, tens[tens_val])
+			parts = append(parts, tens[tensVal])
 		}
-
 		n = 0
 	}
 
@@ -142,11 +144,11 @@ func Join(sep string, args ...string) string {
 }
 
 func TotalLen(sep string, args ...string) int {
-	sep_len := len(sep)
-	var total_len int
+	sepLen := len(sep)
+	var totalLen int
 	for _, s := range args {
-		total_len += len(s) + sep_len
+		totalLen += len(s) + sepLen
 	}
 
-	return total_len - sep_len
+	return totalLen - sepLen
 }
