@@ -32,13 +32,12 @@ func Join(sep string, args ...string) string {
 }
 
 func TotalLen(sep string, args ...string) int {
-	sepLen := len(sep)
 	totalLen := 0
 	for i := range args {
 		totalLen += len(args[i])
 	}
 
-	totalLen += sepLen * (len(args) - 1)
+	totalLen += len(sep) * (len(args) - 1)
 
 	return totalLen
 }
