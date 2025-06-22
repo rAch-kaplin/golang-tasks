@@ -30,7 +30,7 @@ jobs:
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v3
       with:
-        version: v1.61
+        version: v1.64.8
 
     - name: Install Compose
       uses: ndeloof/install-compose-action@v0.0.1
