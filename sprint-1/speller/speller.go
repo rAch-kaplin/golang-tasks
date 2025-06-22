@@ -3,8 +3,7 @@
 package speller
 
 import (
-	"strings"
-	// "github.com/mipt-golang-course/golang-tasks/sprint-1/varjoin"
+	"github.com/mipt-golang-course/golang-tasks/sprint-1/varjoin"
 )
 
 var ones = map[int64]string{
@@ -83,7 +82,7 @@ func Spell(n int64) string {
 		parts = append(parts, SpellBelowThousand(belowThousand))
 	}
 
-	return Join(" ", parts...)
+	return varjoin.Join(" ", parts...)
 }
 
 func SpellMinus(n int64) (int64, string) {
@@ -122,33 +121,5 @@ func SpellBelowThousand(n int64) string {
 		parts = append(parts, ones[n])
 	}
 
-	return Join(" ", parts...)
-}
-
-func Join(sep string, args ...string) string {
-	if len(args) == 0 {
-		return ""
-	}
-
-	output := strings.Builder{}
-	output.Grow(TotalLen(sep, args...))
-
-	for i, s := range args {
-		if i > 0 {
-			output.WriteString(sep)
-		}
-		output.WriteString(s)
-	}
-
-	return output.String()
-}
-
-func TotalLen(sep string, args ...string) int {
-	sepLen := len(sep)
-	var totalLen int
-	for _, s := range args {
-		totalLen += len(s) + sepLen
-	}
-
-	return totalLen - sepLen
+	return varjoin.Join(" ", parts...)
 }
