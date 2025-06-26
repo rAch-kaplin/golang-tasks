@@ -81,7 +81,7 @@ func NewTreeWorker(out io.Writer, printFiles bool) *treeWorker {
 func (tw *treeWorker) prepareDirs(path string) ([]os.DirEntry, error) {
 	entries, err := os.ReadDir(path)
 	if err != nil {
-		return nil, fmt.Errorf("ReadDir failed %w", err)
+		return nil, fmt.Errorf("failed to read directory %s: %w", path, err)
 	}
 
 	processedEntries := make([]os.DirEntry, 0, len(entries))
@@ -141,7 +141,7 @@ func (dw *dirWorker) getFileSizeString() (string, error) {
 
 	info, err := dw.entry.Info()
 	if err != nil {
-		return "", fmt.Errorf("%w", err)
+		return "", fmt.Errorf("failed to get file info for %s: %w", dw.entry.Name(), err)
 	}
 
 	if info.Size() == 0 {
@@ -154,7 +154,7 @@ func (dw *dirWorker) getFileSizeString() (string, error) {
 func (dw *dirWorker) printLine() error {
 	sizeStr, err := dw.getFileSizeString()
 	if err != nil {
-		return fmt.Errorf("getFileSizeString failed %w", err)
+		return fmt.Errorf("failed to prepare size string for %s: %w", dw.entry.Name(), err)
 	}
 
 	if _, err = fmt.Fprintln(dw.worker.out, strings.Join([]string{dw.basePrefix, dw.branch, dw.entry.Name(), sizeStr}, "")); err != nil {
@@ -167,20 +167,20 @@ func (dw *dirWorker) printLine() error {
 func (tw *treeWorker) walkOnTree(path, prefix string) error {
 	entries, err := tw.prepareDirs(path)
 	if err != nil {
-		return fmt.Errorf("prepareDirs failed %w", err)
+		return fmt.Errorf("failed to prepare directory listing for %s: %w", path, err)
 	}
 
 	for i, entry := range entries {
 		processor := NewDirWorker(tw, entry, i == len(entries)-1, prefix)
 
 		if err := processor.printLine(); err != nil {
-			return fmt.Errorf("printLine failed %w", err)
+			return fmt.Errorf("failed to process entry %s in %s: %w", entry.Name(), path, err)
 		}
 
 		if processor.entry.IsDir() {
 			err := tw.walkOnTree(filepath.Join(path, processor.entry.Name()), processor.nextPrefix)
 			if err != nil {
-				return fmt.Errorf("walkOnTree failed %w", err)
+				return fmt.Errorf("failed to walk subdirectory %w", err)
 			}
 		}
 	}
