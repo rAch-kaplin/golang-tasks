@@ -29,7 +29,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"sort"
+	"slices"
 	"strings"
 )
 
@@ -81,7 +81,7 @@ func NewTreeWorker(out io.Writer, printFiles bool) *treeWorker {
 func (tw *treeWorker) prepareDirs(path string) ([]os.DirEntry, error) {
 	entries, err := os.ReadDir(path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ReadDir failed %w", err)
 	}
 
 	processedEntries := make([]os.DirEntry, 0, len(entries))
@@ -99,12 +99,12 @@ func shouldInclude(entry os.DirEntry, printFiles bool) bool {
 	if !printFiles && !entry.IsDir() {
 		return false
 	}
-	return entry.Name() != ".DS_Store"
+	return true
 }
 
 func sortDirsByName(entries []os.DirEntry) {
-	sort.Slice(entries, func(i, j int) bool {
-		return entries[i].Name() < entries[j].Name()
+	slices.SortFunc(entries, func(i, j os.DirEntry) int {
+		return strings.Compare(i.Name(), j.Name())
 	})
 }
 
@@ -141,7 +141,7 @@ func (dw *dirWorker) getFileSizeString() (string, error) {
 
 	info, err := dw.entry.Info()
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("%w", err)
 	}
 
 	if info.Size() == 0 {
@@ -154,30 +154,33 @@ func (dw *dirWorker) getFileSizeString() (string, error) {
 func (dw *dirWorker) printLine() error {
 	sizeStr, err := dw.getFileSizeString()
 	if err != nil {
-		return err
+		return fmt.Errorf("getFileSizeString failed %w", err)
 	}
 
-	_, err = fmt.Fprintln(dw.worker.out, strings.Join([]string{dw.basePrefix, dw.branch, dw.entry.Name(), sizeStr}, ""))
-	return err
+	if _, err = fmt.Fprintln(dw.worker.out, strings.Join([]string{dw.basePrefix, dw.branch, dw.entry.Name(), sizeStr}, "")); err != nil {
+		return fmt.Errorf("failed to write output for %s: %w", dw.entry.Name(), err)
+	}
+
+	return nil
 }
 
 func (tw *treeWorker) walkOnTree(path, prefix string) error {
 	entries, err := tw.prepareDirs(path)
 	if err != nil {
-		return err
+		return fmt.Errorf("prepareDirs failed %w", err)
 	}
 
 	for i, entry := range entries {
 		processor := NewDirWorker(tw, entry, i == len(entries)-1, prefix)
 
 		if err := processor.printLine(); err != nil {
-			return err
+			return fmt.Errorf("printLine failed %w", err)
 		}
 
 		if processor.entry.IsDir() {
 			err := tw.walkOnTree(filepath.Join(path, processor.entry.Name()), processor.nextPrefix)
 			if err != nil {
-				return err
+				return fmt.Errorf("walkOnTree failed %w", err)
 			}
 		}
 	}
